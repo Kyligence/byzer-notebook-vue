@@ -3,11 +3,20 @@
   <div class="user-info-wrapper">
     <el-dropdown @command="handleUser">
       <span class="el-dropdown-link user-center">
-        <span class="user-box">{{simplyName}}</span><span class="username ellipsis-item">{{userInfo && userInfo.username}}</span><i class="el-icon-arrow-down el-icon--right"></i>
+        <span class="user-box">{{ simplyName }}</span>
+        <span class="username ellipsis-item">
+          {{ userInfo && userInfo.username }}
+        </span>
+        <i class="el-icon-arrow-down el-icon--right"></i>
       </span>
       <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item>{{$t('login.userName')}}: {{userInfo && userInfo.username || ''}}</el-dropdown-item>
-        <el-dropdown-item command="logout">{{$t('login.logout')}}</el-dropdown-item>
+        <el-dropdown-item>
+          {{ $t('login.userName') }}:
+          {{ (userInfo && userInfo.username) || '' }}
+        </el-dropdown-item>
+        <el-dropdown-item command="logout">
+          {{ $t('login.logout') }}
+        </el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
   </div>
@@ -16,6 +25,7 @@
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator';
 import { mapActions, mapMutations, mapState } from 'vuex'
+import { accessToZenLogin } from '../../util'
 
 @Component({
   computed: {
@@ -47,7 +57,8 @@ export default class UserInfo extends Vue {
     try {
       await this.logout()
       this.clearUserInfo(null)
-      this.$router.push({name: 'login'})
+      accessToZenLogin()
+      // this.$router.push({name: 'login'})
     } catch (e) {
       console.log(e)
     }
