@@ -2,9 +2,9 @@
 
 
 import axios from 'axios'
-import router from '../router'
 import store from '../store'
 import { actionsTypes } from '../store'
+import { accessToZenLogin } from '../util'
 const { VUE_APP_API_URL } = process.env
 
 var instance = axios.create({
@@ -29,7 +29,7 @@ instance.interceptors.response.use(
       switch (error.response.status) {
         case 401:
           store.commit(actionsTypes.HIDE_ALL_MODALS)
-          router.push({name: 'login'})
+          accessToZenLogin()
       }
     }
     const result = error.response.data
@@ -38,6 +38,5 @@ instance.interceptors.response.use(
     return Promise.reject(error.response)
   }
 )
- 
- export default instance
- 
+
+export default instance

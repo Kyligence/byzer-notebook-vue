@@ -1,6 +1,7 @@
 
 import axios from '../service/handleService'
 import CryptoJS from 'crypto-js'
+import { LOCALSTORAGE_KEYS } from '../config'
 
 export function getBrowserLang () {
   const lang = navigator.language || navigator.browserLanguage
@@ -203,4 +204,17 @@ export function findChildren (list = {}, refName = '') {
     }
   }
   return result
+}
+
+
+/**
+ * @description: 清除 token 并跳转到 Zen 的登录页
+ * @Date: 2022-02-15 15:02:50
+ */
+export function accessToZenLogin () {
+  localStorage.removeItem(LOCALSTORAGE_KEYS.ZEN_TOKEN)
+  localStorage.removeItem(LOCALSTORAGE_KEYS.ZEN_ACCOUNT)
+  localStorage.removeItem(LOCALSTORAGE_KEYS.ZEN_USER_EMAIL)
+  const zenLoginUrl = location.origin + '/login'
+  window.location.href = zenLoginUrl
 }

@@ -21,6 +21,12 @@ export const MarkdownTag = '--%markdown'
 export const PythonTag = '#%python'
 export const SpecialCodeSuggestKey = ['.', '/', '`', '\'', '"']
 
+export const LOCALSTORAGE_KEYS = {
+  ZEN_TOKEN: 'zen-token',
+  ZEN_ACCOUNT: 'zen-account',
+  ZEN_USER_EMAIL: 'zen-user-email'
+}
+
 /**
  * key: file type
  * value: suffix
