@@ -215,6 +215,6 @@ export function accessToZenLogin () {
   localStorage.removeItem(LOCALSTORAGE_KEYS.ZEN_TOKEN)
   localStorage.removeItem(LOCALSTORAGE_KEYS.ZEN_ACCOUNT)
   localStorage.removeItem(LOCALSTORAGE_KEYS.ZEN_USER_EMAIL)
-  const zenLoginUrl = location.origin + '/login'
+  const zenLoginUrl = location.origin + '/user/login'
   window.location.href = zenLoginUrl
 }
