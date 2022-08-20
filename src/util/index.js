@@ -3,24 +3,24 @@ import axios from '../service/handleService'
 import CryptoJS from 'crypto-js'
 import { LOCALSTORAGE_KEYS } from '../config'
 
-export function getBrowserLang () {
+export function getBrowserLang() {
   const lang = navigator.language || navigator.browserLanguage
   return lang.toLowerCase().includes('zh') ? 'en' : 'zh'
 }
-export function getGlobalLang () {
+export function getGlobalLang() {
   let localLang = localStorage.getItem('lang')
   let browerserLang = getBrowserLang()
   return localLang || browerserLang
 }
 
-export function formatGetParams (params) {
+export function formatGetParams(params) {
   let str = ''
   const keys = Object.keys(params)
   keys.map(v => str += `&${v}=${params[v]}`)
   return str
 }
 
-export function timeToStr (time) {
+export function timeToStr(time) {
   const ms = time % 1000 // 毫秒数
   let totalSecond = (time - ms) / 1000 // 总秒数
   const seconds = totalSecond % 60 // 秒数
@@ -37,7 +37,7 @@ export function timeToStr (time) {
     ms
   }
 }
-export function getChildren (arr, parentPath) {
+export function getChildren(arr, parentPath) {
   // 每一项做比较
   // 第一项不相同，则组成{label: 第一项， children: 第一项以后的数据组成的数组}
   // 第一项相同 则第一项以后的合并成一个一个数组 组成{label: 第一项， children: 第一项以后的数据组成的数组}
@@ -60,19 +60,19 @@ export function getChildren (arr, parentPath) {
     if (index !== -1) {
       v.children = getChildren(v.children, v.path + '/')
     } else {
-      v.children = v.children.map(child => ({label: child[0], children: [], path: v.path + '/' + child[0] }))
+      v.children = v.children.map(child => ({ label: child[0], children: [], path: v.path + '/' + child[0] }))
     }
   })
   return nodeArr
 }
 
-export function getDirTree (dirArr) {
+export function getDirTree(dirArr) {
   const arr = dirArr.map(v => v.split('/').slice(1))
   const treeArr = getChildren(arr, '/')
   return treeArr
 }
 
-export function setIdinTreeArr (treeArr, pathIdArr) {
+export function setIdinTreeArr(treeArr, pathIdArr) {
   // 根据 id 和路径塞进最后一层
   treeArr.map(v => {
     const index = pathIdArr.findIndex(item => item.path === v.path)
@@ -84,7 +84,7 @@ export function setIdinTreeArr (treeArr, pathIdArr) {
   })
 }
 
-export function getDemoList (list) {
+export function getDemoList(list) {
   const demoList = []
   list.forEach(v => {
     if (v.id && v.is_demo) {
@@ -98,7 +98,7 @@ export function getDemoList (list) {
   return demoList
 }
 
-export function getAllList (list) {
+export function getAllList(list) {
   const result = []
 
   list.forEach(v => {
@@ -112,7 +112,7 @@ export function getAllList (list) {
   return result
 }
 
-export function getCasAndTree (list) { // 对于指定结构转化成 tree 和 cascader都可以用的结构
+export function getCasAndTree(list) { // 对于指定结构转化成 tree 和 cascader都可以用的结构
   return list.map(v => {
     if (v.name) {
       v.label = v.name
@@ -141,15 +141,15 @@ export function getCasAndTree (list) { // 对于指定结构转化成 tree 和 c
   })
 }
 // 生成指定长度的唯一ID
-export function GenNonDuplicateID (randomLength) {
+export function GenNonDuplicateID(randomLength) {
   return Number(
     Math.random()
-    .toString()
-    .substr(3, randomLength) + Date.now()
+      .toString()
+      .substr(3, randomLength) + Date.now()
   ).toString(36);
 }
 
-export function stringtoHex (str) {
+export function stringtoHex(str) {
   var val = '';
   for (var i = 0; i < str.length; i++) {
     if (val === '')
@@ -161,7 +161,7 @@ export function stringtoHex (str) {
   return val
 }
 
-export async function encryptData (word) { // hext string 需要再 Hex.parse 一下
+export async function encryptData(word) { // hext string 需要再 Hex.parse 一下
   let res = await axios.get('/api/settings/key')
   let key = CryptoJS.enc.Hex.parse(res.data)
   var encrypted = ''
@@ -172,7 +172,7 @@ export async function encryptData (word) { // hext string 需要再 Hex.parse �
   return encrypted.ciphertext.toString();
 }
 
-export function cryptoDecrypt (word) {
+export function cryptoDecrypt(word) {
   var key = CryptoJS.enc.Utf8.parse('1fb511361580867f62c71b08f9db72f3')
   var encryptedHexStr = CryptoJS.enc.Hex.parse(word)
   var srcs = CryptoJS.enc.Base64.stringify(encryptedHexStr)
@@ -191,7 +191,7 @@ export function cryptoDecrypt (word) {
  * @return {result} 找到的FindAndReplace组件
  * @Date: 2021-09-06 17:59:50
  */
-export function findChildren (list = {}, refName = '') {
+export function findChildren(list = {}, refName = '') {
   let result = [];
   if (!list.$children) {
     return result;
@@ -208,13 +208,14 @@ export function findChildren (list = {}, refName = '') {
 
 
 /**
- * @description: 清除 token 并跳转到 Zen 的登录页
- * @Date: 2022-02-15 15:02:50
+ * @description: 清除 token 并跳转到 Zen 的首页
+ * @Date: 2022-08-20
  */
-export function accessToZenLogin () {
+export function accessToZenLogin() {
   localStorage.removeItem(LOCALSTORAGE_KEYS.ZEN_TOKEN)
   localStorage.removeItem(LOCALSTORAGE_KEYS.ZEN_ACCOUNT)
   localStorage.removeItem(LOCALSTORAGE_KEYS.ZEN_USER_EMAIL)
-  const zenLoginUrl = location.origin + '/user/login'
+  // 由于白泽中语言参数不在URL上，这边通过跳入Zen首页进行语言参数的获取，再跳入登录页（Zen中逻辑）
+  const zenLoginUrl = location.origin + '/index'
   window.location.href = zenLoginUrl
 }
