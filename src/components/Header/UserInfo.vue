@@ -56,7 +56,8 @@ export default class UserInfo extends Vue {
   async handleLogout () {
     try {
       await this.logout()
-      this.clearUserInfo(null)
+      // 取消清空缓存，因为会造成Zen中语言标识丢失
+      // this.clearUserInfo(null)
       accessToZenLogin()
       // this.$router.push({name: 'login'})
     } catch (e) {
